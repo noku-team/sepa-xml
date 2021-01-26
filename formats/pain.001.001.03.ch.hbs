@@ -85,6 +85,13 @@ pm@six-group.com
 					</Id>
 				</CdtrAcct>
         {{/if}}
+        {{#if creditorIban}}
+        <CdtrAcct>
+					<Id>
+						<IBAN>{{creditorIban}}</IBAN>
+					</Id>
+				</CdtrAcct>
+        {{/if}}
         {{#if remittanceInformation}}
         <RmtInf>
 					<Strd>
