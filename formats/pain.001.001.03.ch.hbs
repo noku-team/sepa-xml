@@ -19,63 +19,76 @@
         {{/if}}
       </InitgPty>
     </GrpHdr>
+    {{#each _payments.transactions}}
     <PmtInf>
-      <PmtInfId>{{_payments.info.id}}</PmtInfId>
-      <PmtMtd>{{_payments.info.method}}</PmtMtd>
-      <BtchBookg>{{_payments.info.batchBooking}}</BtchBookg>
-      <NbOfTxs>{{_payments.info.transactionCount}}</NbOfTxs>
-      <CtrlSum>{{_payments.info.transactionControlSum}}</CtrlSum>
-      {{#if _payments.info.typeInformation}}
-      <PmtTpInf>
-        <SvcLvl>
-          <Cd>{{_payments.info.typeInformation}}</Cd>
-        </SvcLvl>
-      </PmtTpInf>
-      {{/if}}
-      <ReqdExctnDt>{{formatDate _payments.info.when}}</ReqdExctnDt>
+      <PmtInfId>{{id}}</PmtInfId>
+			<PmtMtd>{{method}}</PmtMtd>
+			<BtchBookg>{{batchBooking}}</BtchBookg>
+			<ReqdExctnDt>{{when}}</ReqdExctnDt>
       <Dbtr>
-        <Nm>{{_payments.info.senderName}}</Nm>
+        <Nm>{{senderName}}</Nm>
       </Dbtr>
       <DbtrAcct>
-        <Id>
-          <IBAN>{{_payments.info.senderIBAN}}</IBAN>
-        </Id>
-      </DbtrAcct>
-      {{#if _payments.info.bic}}
-        <DbtrAgt>
-          <FinInstnId>
-            <BIC>{{_payments.info.bic}}</BIC>
-          </FinInstnId>
-        </DbtrAgt>
+				<Id>
+					<IBAN>{{recipientIBAN}}</IBAN>
+				</Id>
+			</DbtrAcct>
+      {{#if bic}}
+      <DbtrAgt>
+				<FinInstnId>
+					<BIC>{{bic}}</BIC>
+				</FinInstnId>
+			</DbtrAgt>
       {{/if}}
-      {{#each _payments.transactions}}
-        <CdtTrfTxInf>
-          <PmtId>
-            <EndToEndId>{{endToEndId}}</EndToEndId>
-          </PmtId>
-          <Amt>
-            <InstdAmt Ccy="{{ccy}}">{{amount}}</InstdAmt>
-          </Amt>
-          {{#if bic}}
-            <CdtrAgt>
-              <FinInstnId>
-                <BIC>{{bic}}</BIC>
-              </FinInstnId>
-            </CdtrAgt>
-          {{/if}}
-          <Cdtr>
-            <Nm>{{senderName}}</Nm>
-          </Cdtr>
-          <CdtrAcct>
-            <Id>
-              <IBAN>{{recipientIBAN}}</IBAN>
-            </Id>
-          </CdtrAcct>
-          <RmtInf>
-            <Ustrd>{{paymentDescription}}</Ustrd>
-          </RmtInf>
-        </CdtTrfTxInf>
-      {{/each}}
+      <CdtTrfTxInf>
+        <PmtId>
+					<InstrId>{{id}}-01</InstrId>
+					<EndToEndId>{{endToEndId}}</EndToEndId>
+				</PmtId>
+        {{#if typeInformation}}
+        <PmtTpInf>
+					<LclInstrm>
+						<Prtry>{{typeInformation}}</Prtry>
+					</LclInstrm>
+				</PmtTpInf>
+        {{/if}}
+        <Amt>
+          <InstdAmt Ccy="{{ccy}}">{{amount}}</InstdAmt>
+        </Amt>
+        {{#if creditorName}}
+        <Cdtr>
+					<Nm>{{creditorName}}</Nm>
+          {{#if creditorAddress}}
+          <PstlAdr>
+						<StrtNm>{{creditorAddress.street}}</StrtNm>
+						<BldgNb>{{creditorAddress.number}}</BldgNb>
+						<PstCd>{{creditorAddress.postalCode}}</PstCd>
+						<TwnNm>{{creditorAddress.city}}</TwnNm>
+						<Ctry>{{creditorAddress.country}}</Ctry>
+					</PstlAdr>
+          {{/if}}					
+				</Cdtr>
+        {{/if}}        
+        {{#if cashAccount}}
+        <CdtrAcct>
+					<Id>
+						<Othr>
+							<Id>{{cashAccount}}</Id>
+						</Othr>
+					</Id>
+				</CdtrAcct>
+        {{/if}}
+        {{#if remittanceInformation}}
+        <RmtInf>
+					<Strd>
+						<CdtrRefInf>
+							<Ref>{{remittanceInformation}}</Ref>
+						</CdtrRefInf>
+					</Strd>
+				</RmtInf>
+        {{/if}}
+      </CdtTrfTxInf>
     </PmtInf>
+    {{/each}}
   </CstmrCdtTrfInitn>
 </Document>
