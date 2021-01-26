@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03 pain.001.001.03.xsd">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>{{_header.messageId}}</MsgId>
+      <CreDtTm>{{timestamp}}</CreDtTm>
+      <NbOfTxs>{{_header.transactionCount}}</NbOfTxs>
+      <CtrlSum>{{_header.transactionControlSum}}</CtrlSum>
+      <InitgPty>
+        <Nm>{{_header.initiator}}</Nm>
+        {{#if _header.initiatorId}}
+          <Id>
+            <PrvtId>
+              <Othr>
+                <Id>{{_header.initiatorId}}</Id>
+              </Othr>
+            </PrvtId>
+          </Id>
+        {{/if}}
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>{{_payments.info.id}}</PmtInfId>
+      <PmtMtd>{{_payments.info.method}}</PmtMtd>
+      <BtchBookg>{{_payments.info.batchBooking}}</BtchBookg>
+      <NbOfTxs>{{_payments.info.transactionCount}}</NbOfTxs>
+      <CtrlSum>{{_payments.info.transactionControlSum}}</CtrlSum>
+      {{#if _payments.info.typeInformation}}
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>{{_payments.info.typeInformation}}</Cd>
+        </SvcLvl>
+      </PmtTpInf>
+      {{/if}}
+      <ReqdExctnDt>{{formatDate _payments.info.when}}</ReqdExctnDt>
+      <Dbtr>
+        <Nm>{{_payments.info.senderName}}</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>{{_payments.info.senderIBAN}}</IBAN>
+        </Id>
+      </DbtrAcct>
+      {{#if _payments.info.bic}}
+        <DbtrAgt>
+          <FinInstnId>
+            <BIC>{{_payments.info.bic}}</BIC>
+          </FinInstnId>
+        </DbtrAgt>
+      {{/if}}
+      {{#each _payments.transactions}}
+        <CdtTrfTxInf>
+          <PmtId>
+            <EndToEndId>{{endToEndId}}</EndToEndId>
+          </PmtId>
+          <Amt>
+            <InstdAmt Ccy="{{_payments.ccy}}">{{amount}}</InstdAmt>
+          </Amt>
+          {{#if bic}}
+            <CdtrAgt>
+              <FinInstnId>
+                <BIC>{{bic}}</BIC>
+              </FinInstnId>
+            </CdtrAgt>
+          {{/if}}
+          <Cdtr>
+            <Nm>{{senderName}}</Nm>
+          </Cdtr>
+          <CdtrAcct>
+            <Id>
+              <IBAN>{{recipientIBAN}}</IBAN>
+            </Id>
+          </CdtrAcct>
+          <RmtInf>
+            <Ustrd>{{paymentDescription}}</Ustrd>
+          </RmtInf>
+        </CdtTrfTxInf>
+      {{/each}}
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>
