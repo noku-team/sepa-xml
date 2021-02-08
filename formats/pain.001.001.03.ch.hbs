@@ -26,30 +26,33 @@ pm@six-group.com
         {{/if}}
       </InitgPty>
     </GrpHdr>
-    {{#each _payments.transactions}}
     <PmtInf>
-      <PmtInfId>{{id}}</PmtInfId>
-			<PmtMtd>{{method}}</PmtMtd>
-			<BtchBookg>{{batchBooking}}</BtchBookg>
-			<ReqdExctnDt>{{when}}</ReqdExctnDt>
+      <PmtInfId>{{_payments.info.id}}</PmtInfId>
+			<PmtMtd>{{_payments.info.method}}</PmtMtd>
+			<BtchBookg>{{_payments.info.batchBooking}}</BtchBookg>
+			<ReqdExctnDt>{{_payments.info.date}}</ReqdExctnDt>
       <Dbtr>
-        <Nm>{{senderName}}</Nm>
+        <Nm>{{_payments.info.senderName}}</Nm>
       </Dbtr>
       <DbtrAcct>
 				<Id>
-					<IBAN>{{recipientIBAN}}</IBAN>
+					<IBAN>{{_payments.info.senderIBAN}}</IBAN>
 				</Id>
+        <Tp>
+					<Prtry>{{_payments.info.senderProprietary}}</Prtry>
+				</Tp>
 			</DbtrAcct>
-      {{#if bic}}
+      {{#if _payments.info.bic}}
       <DbtrAgt>
 				<FinInstnId>
-					<BIC>{{bic}}</BIC>
+					<BIC>{{_payments.info.bic}}</BIC>
 				</FinInstnId>
 			</DbtrAgt>
       {{/if}}
+      {{#each _payments.transactions}}
       <CdtTrfTxInf>
         <PmtId>
-					<InstrId>{{id}}-01</InstrId>
+					<InstrId>{{id}}</InstrId>
 					<EndToEndId>{{endToEndId}}</EndToEndId>
 				</PmtId>
         {{#if typeInformation}}
@@ -102,7 +105,7 @@ pm@six-group.com
 				</RmtInf>
         {{/if}}
       </CdtTrfTxInf>
-    </PmtInf>
-    {{/each}}
+      {{/each}}
+    </PmtInf>    
   </CstmrCdtTrfInitn>
 </Document>
